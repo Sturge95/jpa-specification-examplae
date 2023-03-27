@@ -19,8 +19,8 @@ abstract class UserSearchFieldValidator(
 class DateFieldValidator(userSearchField: UserSearchField) : UserSearchFieldValidator(userSearchField) {
     override fun validate(stringValue: String): Boolean {
         val splitDates = stringValue.split(",")
-        val boolean = splitDates.all { it.trim().isBlank() }
-        if (boolean) {
+        val noDatesPresent = splitDates.all { it.trim().isBlank() }
+        if (noDatesPresent) {
             return false
         }
         if (splitDates.size != 2) {

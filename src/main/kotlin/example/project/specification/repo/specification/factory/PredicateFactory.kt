@@ -21,7 +21,7 @@ class UserPredicateFactory(private val userSearchField: UserSearchField, private
             UserSearchField.LAST_NAME,
             UserSearchField.PHONE_NUMBER -> StringFieldPredicateNoJoin()
 
-            UserSearchField.DATE_OF_BIRTH -> StringFieldPredicateNoJoin()
+            UserSearchField.DATE_OF_BIRTH -> DateFieldPredicateNoJoin()
             UserSearchField.ADDRESS_POSTCODE,
             UserSearchField.ADDRESS_STREET -> StringPredicateWithAddressJoin(inPredicate = false)
 
@@ -36,6 +36,7 @@ class UserPredicateFactory(private val userSearchField: UserSearchField, private
 }
 
 interface PredicateGenerator {
+
     fun createPredicate(searchString: String, searchField: UserSearchField, root: Root<User>, criteriaBuilder: CriteriaBuilder): Predicate
 
 }
@@ -47,7 +48,6 @@ class StringFieldPredicateNoJoin() : PredicateGenerator {
 }
 
 class StringPredicateWithAddressJoin(private val inPredicate: Boolean) : PredicateGenerator {
-
     override fun createPredicate(searchString: String, searchField: UserSearchField, root: Root<User>, criteriaBuilder: CriteriaBuilder): Predicate {
         val fieldValuesToSearch = searchString.split(",").map { it.toLong() }
         val joinToAddress = root.join<Address, User>(searchField.fieldOne.name)
@@ -68,7 +68,6 @@ class DateFieldPredicateNoJoin() : PredicateGenerator {
         val dateTo = splitDates[1]
         return PredicateUtils.dateBetween(dateFrom, dateTo, searchField.fieldOne, root, criteriaBuilder)
     }
-
 }
 
 object PredicateUtils {
