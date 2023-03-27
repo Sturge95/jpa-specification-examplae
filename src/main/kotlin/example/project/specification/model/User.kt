@@ -18,7 +18,6 @@ class User(
     var lastName: String,
     var phoneNumber: String,
     var dateOfBirth: LocalDateTime,
-
     @ManyToOne
     @JoinColumn(name = "address_id")
     var address: Address
